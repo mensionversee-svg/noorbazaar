@@ -34,6 +34,7 @@ export type Database = {
           subtotal: number
           total: number
           user_id: string | null
+          whatsapp: string | null
         }
         Insert: {
           address: string
@@ -54,6 +55,7 @@ export type Database = {
           subtotal?: number
           total?: number
           user_id?: string | null
+          whatsapp?: string | null
         }
         Update: {
           address?: string
@@ -74,6 +76,7 @@ export type Database = {
           subtotal?: number
           total?: number
           user_id?: string | null
+          whatsapp?: string | null
         }
         Relationships: []
       }
