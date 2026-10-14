@@ -29,7 +29,7 @@ export const Route = createFileRoute('/checkout')({
 function Checkout() {
   const shop = useShop()
   const { user } = useAuth()
-  const [form, setForm] = useState({ name: '', phone: '', email: user?.email ?? '', city: '', address: '', notes: '' })
+  const [form, setForm] = useState({ name: '', phone: '', whatsapp: '', email: user?.email ?? '', city: '', address: '', notes: '' })
   const [busy, setBusy] = useState(false)
   const [done, setDone] = useState<string | null>(null)
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setForm({ ...form, [k]: e.target.value })
@@ -60,6 +60,7 @@ function Checkout() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!/^[0-9+\s-]{10,15}$/.test(form.phone)) { toast.error('Sahi phone number likhein'); return }
+    if (!/^[0-9+\s-]{10,15}$/.test(form.whatsapp)) { toast.error('Sahi WhatsApp number likhein'); return }
     setBusy(true)
     const id = crypto.randomUUID()
     const items: Array<OrderItem> = shop.items.map((i) => ({ productId: i.productId, name: i.product.name, price: i.product.price, quantity: i.quantity, options: i.options, image: i.product.image }))
@@ -68,6 +69,7 @@ function Checkout() {
       user_id: user?.id ?? null,
       customer_name: form.name.trim(),
       phone: form.phone.trim(),
+      whatsapp: form.whatsapp.trim(),
       email: form.email.trim() || null,
       city: form.city.trim(),
       address: form.address.trim(),
@@ -95,6 +97,7 @@ function Checkout() {
           <div className="grid gap-4 sm:grid-cols-2">
             <input required maxLength={80} placeholder="Full name" value={form.name} onChange={set('name')} className={inputCls} />
             <input required maxLength={15} placeholder="Phone (03xx xxxxxxx)" value={form.phone} onChange={set('phone')} className={inputCls} />
+            <input required maxLength={15} inputMode="tel" placeholder="WhatsApp number (03xx xxxxxxx)" value={form.whatsapp} onChange={set('whatsapp')} className={inputCls} />
             <input type="email" maxLength={120} placeholder="Email (optional)" value={form.email} onChange={set('email')} className={inputCls} />
             <input required maxLength={60} placeholder="City" value={form.city} onChange={set('city')} className={inputCls} />
           </div>
