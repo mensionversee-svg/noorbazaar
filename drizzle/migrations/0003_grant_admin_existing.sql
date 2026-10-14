@@ -1,0 +1,1 @@
+insert into public.user_roles(user_id, role) select id, 'admin'::public.app_role from auth.users where lower(email) in ('mujahidaliraza7@gmail.com','heartlessgirl557@gmail.com') on conflict do nothing;
