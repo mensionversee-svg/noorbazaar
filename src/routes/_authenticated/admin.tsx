@@ -61,7 +61,7 @@ function Orders() {
       {rows.map((o) => (
         <li key={o.id} className="rounded-2xl border border-line bg-white p-4">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <p className="font-semibold">{orderRef(o)} · {o.customer_name} · {o.phone}</p>
+            <p className="font-semibold">{orderRef(o)} · {o.customer_name} · {o.phone}{o.whatsapp ? ` · WhatsApp: ${o.whatsapp}` : ''}</p>
             <div className="flex items-center gap-2">
               <span className={`rounded-full px-3 py-1 text-xs font-semibold ${statusColor[o.status] ?? ''}`}>{statusLabel[o.status] ?? o.status}</span>
               <select aria-label="Change status" value={o.status} onChange={(e) => setStatus(o.id, e.target.value)} className="rounded-lg border border-line px-2 py-1 text-sm">
