@@ -176,7 +176,7 @@ function ProductForm({ initial, onDone, onCancel }: { initial?: any; onDone: () 
   const cat = categories.find((c) => c.slug === f.category)
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!f.name.trim()) return toast.error('Name likhein')
+    if (!f.name.trim()) { toast.error('Name likhein'); return }
     const images = String(f.images).split(/\s+/).filter((u) => u.startsWith('http') || u.startsWith('/'))
     const payload = {
       name: f.name.trim(), price: Number(f.price) || 0, compare_at: f.compare_at ? Number(f.compare_at) : null, stock: Number(f.stock) || 0,
