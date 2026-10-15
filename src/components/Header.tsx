@@ -59,7 +59,7 @@ function AnnouncementBar() {
 
 export function Header() {
   const { count, wishlist, setDrawerOpen } = useShop()
-  const { user } = useAuth()
+  const { user, isAdmin } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
 
   const iconBtn = 'relative flex h-10 w-10 items-center justify-center rounded-full text-ink transition hover:bg-sand'
@@ -78,6 +78,7 @@ export function Header() {
             <SearchForm />
           </div>
           <nav aria-label="Account and cart" className="ml-auto flex items-center gap-1 md:ml-0">
+            {isAdmin && <Link to="/admin" className="rounded-full bg-emerald-900 px-3 py-1.5 text-xs font-semibold text-ivory">Admin</Link>}
             <Link to={user ? '/account' : '/auth'} className={iconBtn} aria-label={user ? 'My account' : 'Sign in'}>
               <User size={21} />
             </Link>
