@@ -40,9 +40,20 @@ function deepAssign(target: any, src: any) {
   }
 }
 
+async function fetchAllProducts() {
+  const all: Array<any> = []
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await supabase.from('products').select('*').order('id').range(from, from + 999)
+    if (error || !data) break
+    all.push(...data)
+    if (data.length < 1000) break
+  }
+  return { data: all }
+}
+
 export async function loadLiveData() {
   const [p, r, s] = await Promise.all([
-    supabase.from('products').select('*').order('id'),
+    fetchAllProducts(),
     supabase.from('reviews').select('*').eq('hidden', false).order('created_at', { ascending: false }),
     supabase.from('site_settings').select('data').eq('id', 1).maybeSingle(),
   ])
