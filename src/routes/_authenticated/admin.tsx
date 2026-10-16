@@ -223,7 +223,16 @@ function Products() {
   const [page, setPage] = useState(0)
   const [editing, setEditing] = useState<any | 'new' | null>(null)
   const load = useCallback(() => {
-    supabase.from('products').select('*').order('id', { ascending: false }).then(({ data }) => setRows(data ?? []))
+    ;(async () => {
+      const all: Array<any> = []
+      for (let from = 0; ; from += 1000) {
+        const { data } = await supabase.from('products').select('*').order('id', { ascending: false }).range(from, from + 999)
+        if (!data) break
+        all.push(...data)
+        if (data.length < 1000) break
+      }
+      setRows(all)
+    })()
   }, [])
   useEffect(load, [load])
   const list = useMemo(() => (rows ?? []).filter((r) => (catF === 'all' || r.category === catF) && r.name.toLowerCase().includes(q.toLowerCase())), [rows, q, catF])
