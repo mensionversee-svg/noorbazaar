@@ -101,6 +101,9 @@ export const categories: Array<Category> = [
     subcategories: [
       { slug: 'dining', name: 'Dining' },
       { slug: 'appliances', name: 'Appliances' },
+      { slug: 'kitchenware', name: 'Kitchenware' },
+      { slug: 'linen', name: 'Home Linen' },
+      { slug: 'essentials', name: 'Home Essentials' },
     ],
   },
   {
@@ -119,6 +122,13 @@ export const categories: Array<Category> = [
     blurb: 'Chappals, leather & more',
     image: '/img/cat-accessories.png',
     subcategories: [{ slug: 'footwear', name: 'Footwear' }],
+  },
+  {
+    slug: 'fitness',
+    name: 'Fitness & Sports',
+    blurb: 'Gym gear, sports & supplements',
+    image: 'https://static.markaz.app/pakistan/products/3344-396-MZ3344200001IBISMT-764389001-product-1.webp',
+    subcategories: [],
   },
 ]
 
