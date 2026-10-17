@@ -8,4 +8,4 @@
 - [x] Import markaz.app Fitness, Home Linen, Perfumes, Home Essentials, Kitchenware products
 - [x] AI photos for the 8 featured products (product pages + checkout)
 - [x] Raise prices of markaz-scraped products by 15%
-- [ ] Admin AI tool: pick order + customer concern -> draft WhatsApp reply
+- [x] Admin AI tool: pick order + customer concern -> draft WhatsApp reply
