@@ -109,7 +109,7 @@ function Checkout() {
           <h2 className="font-display text-2xl font-semibold">Your order</h2>
           <ul className="space-y-2 text-sm">
             {shop.items.map((i) => (
-              <li key={i.key} className="flex justify-between gap-3"><span>{i.product.name} × {i.quantity}</span><span className="font-medium">{formatPKR(i.lineTotal)}</span></li>
+              <li key={i.key} className="flex items-center justify-between gap-3"><span className="flex items-center gap-2"><img src={i.product.image} alt="" className="h-12 w-12 shrink-0 rounded-lg object-cover" /><span>{i.product.name} × {i.quantity}</span></span><span className="font-medium">{formatPKR(i.lineTotal)}</span></li>
             ))}
           </ul>
           <TotalsTable />
