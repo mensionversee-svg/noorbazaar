@@ -8,6 +8,8 @@ import { orderRef, orderStatuses, statusColor, statusLabel } from '@/lib/orders'
 import type { OrderItem } from '@/lib/orders'
 import { store } from '@/config/store'
 import { categories } from '@/data/catalog'
+import { useServerFn } from '@tanstack/react-start'
+import { draftWhatsAppReply } from '@/lib/ai-reply.functions'
 
 export const Route = createFileRoute('/_authenticated/admin')({
   component: Admin,
@@ -15,7 +17,7 @@ export const Route = createFileRoute('/_authenticated/admin')({
 })
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const TABS = ['dashboard', 'orders', 'products', 'customers', 'reviews', 'settings'] as const
+const TABS = ['dashboard', 'orders', 'ai reply', 'products', 'customers', 'reviews', 'settings'] as const
 type Tab = (typeof TABS)[number]
 const cell = 'w-full rounded-lg border border-line bg-white px-2 py-1.5 text-sm'
 const btn = 'rounded-lg bg-emerald-900 px-3 py-1.5 text-sm font-semibold text-ivory disabled:opacity-50'
@@ -45,6 +47,7 @@ function Admin() {
       <div className="mt-6">
         {tab === 'dashboard' && <Dashboard go={setTab} />}
         {tab === 'orders' && <Orders />}
+        {tab === 'ai reply' && <AiReply />}
         {tab === 'products' && <Products />}
         {tab === 'customers' && <Customers />}
         {tab === 'reviews' && <Reviews />}
@@ -403,6 +406,51 @@ function Settings() {
       {field('tiktok', 'TikTok link')}
       {field('youtube', 'YouTube link')}
       <div className="sm:col-span-2"><button disabled={busy} className={btn}>Save settings</button></div>
+    </form>
+  )
+}
+
+function AiReply() {
+  const draft = useServerFn(draftWhatsAppReply)
+  const [orders, setOrders] = useState<Array<any>>([])
+  const [orderId, setOrderId] = useState('')
+  const [concern, setConcern] = useState('')
+  const [reply, setReply] = useState('')
+  const [busy, setBusy] = useState(false)
+  useEffect(() => {
+    supabase.from('orders').select('id,order_number,customer_name,phone,whatsapp,total,status').order('created_at', { ascending: false }).limit(200).then(({ data }) => setOrders(data ?? []))
+  }, [])
+  const order = orders.find((o) => o.id === orderId)
+  const run = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!orderId || !concern.trim()) { toast.error('Order aur concern dono chahiye'); return }
+    setBusy(true)
+    try {
+      const r = await draft({ data: { orderId, concern } })
+      if (r.error) toast.error(r.error); else setReply(r.reply)
+    } catch { toast.error('AI reply abhi nahi ban saka.') }
+    setBusy(false)
+  }
+  const num = (order?.whatsapp || order?.phone || '').replace(/\D/g, '').replace(/^0/, '92')
+  return (
+    <form onSubmit={run} className="space-y-3 rounded-2xl border border-line bg-white p-4">
+      <h2 className="font-semibold">AI WhatsApp reply</h2>
+      <p className="text-sm text-muted">Order chunein, customer ka masla likhein — AI ek reply draft karega.</p>
+      <select aria-label="Order" className={cell} value={orderId} onChange={(e) => setOrderId(e.target.value)}>
+        <option value="">— Order chunein —</option>
+        {orders.map((o) => <option key={o.id} value={o.id}>{orderRef(o)} · {o.customer_name} · {formatPKR(o.total)} · {statusLabel[o.status] ?? o.status}</option>)}
+      </select>
+      <textarea rows={4} maxLength={2000} className={cell} placeholder="Customer concern (e.g. Mera order kab tak aayega?)" value={concern} onChange={(e) => setConcern(e.target.value)} />
+      <button disabled={busy} className={btn}>{busy ? 'Drafting…' : 'Draft reply'}</button>
+      {reply && (
+        <div className="space-y-2">
+          <textarea rows={7} className={cell} value={reply} onChange={(e) => setReply(e.target.value)} aria-label="Draft reply" />
+          <div className="flex flex-wrap gap-2">
+            <button type="button" className={btnOutline} onClick={() => { navigator.clipboard.writeText(reply); toast.success('Copied') }}>Copy</button>
+            {num && <a className={btn} href={`https://wa.me/${num}?text=${encodeURIComponent(reply)}`} target="_blank" rel="noopener noreferrer">Open in WhatsApp</a>}
+          </div>
+        </div>
+      )}
     </form>
   )
 }
