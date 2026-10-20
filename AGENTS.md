@@ -9,3 +9,4 @@
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
 - AI calls go through @lovable.dev/ai-gateway inside admin-checked server functions (src/lib/*.functions.ts) — keeps prompts and keys server-side.
+- Product CSV exports use a separate admin view and browser-side serializer with paginated reads, all stored fields, and full image URLs; prepare the file before the download click to preserve browser download activation.

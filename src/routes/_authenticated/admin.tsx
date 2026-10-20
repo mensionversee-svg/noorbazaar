@@ -10,14 +10,15 @@ import { store } from '@/config/store'
 import { categories } from '@/data/catalog'
 import { useServerFn } from '@tanstack/react-start'
 import { draftWhatsAppReply } from '@/lib/ai-reply.functions'
+import { ProductExport } from '@/components/admin/ProductExport'
 
 export const Route = createFileRoute('/_authenticated/admin')({
   component: Admin,
-  head: () => ({ meta: [{ title: `Admin panel — ${store.name}` }, { name: 'robots', content: 'noindex' }] }),
+  head: () => ({ meta: [{ title: `Admin panel — ${store.name}` }, { name: 'description', content: 'Manage Noor Bazaar products, orders and catalog exports.' }, { property: 'og:title', content: `Admin panel — ${store.name}` }, { property: 'og:description', content: 'Manage Noor Bazaar products, orders and catalog exports.' }, { property: 'og:type', content: 'website' }, { name: 'twitter:card', content: 'summary' }, { name: 'robots', content: 'noindex' }] }),
 })
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const TABS = ['dashboard', 'orders', 'ai reply', 'products', 'customers', 'reviews', 'settings'] as const
+const TABS = ['dashboard', 'orders', 'ai reply', 'products', 'export products', 'customers', 'reviews', 'settings'] as const
 type Tab = (typeof TABS)[number]
 const cell = 'w-full rounded-lg border border-line bg-white px-2 py-1.5 text-sm'
 const btn = 'rounded-lg bg-emerald-900 px-3 py-1.5 text-sm font-semibold text-ivory disabled:opacity-50'
@@ -49,6 +50,7 @@ function Admin() {
         {tab === 'orders' && <Orders />}
         {tab === 'ai reply' && <AiReply />}
         {tab === 'products' && <Products />}
+        {tab === 'export products' && <ProductExport />}
         {tab === 'customers' && <Customers />}
         {tab === 'reviews' && <Reviews />}
         {tab === 'settings' && <Settings />}

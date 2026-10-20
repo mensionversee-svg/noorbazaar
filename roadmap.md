@@ -9,3 +9,4 @@
 - [x] AI photos for the 8 featured products (product pages + checkout)
 - [x] Raise prices of markaz-scraped products by 15%
 - [x] Admin AI tool: pick order + customer concern -> draft WhatsApp reply
+- [ ] Admin CSV download with all product details and image links
